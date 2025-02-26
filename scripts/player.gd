@@ -1,6 +1,11 @@
 extends CharacterBody3D
 
 
+# Emitted when the player was hit by a mob.
+# Put this at the top of the script.
+signal hit
+
+
 # How fast the player moves in meters per second.
 @export var speed = 14
 # The downward acceleration when in the air, in meters per second squared.
@@ -35,6 +40,9 @@ func _physics_process(delta):
 		direction = direction.normalized()
 		# Setting the basis property will affect the rotation of the node.
 		$Pivot.basis = Basis.looking_at(direction)
+		$AnimationPlayer.speed_scale = 4
+	else:
+		$AnimationPlayer.speed_scale = 1
 	
 	# Ground Velocity
 	target_velocity.x = direction.x * speed
@@ -65,7 +73,7 @@ func _physics_process(delta):
 			var mob = collision.get_collider()
 			# we check that we are hitting it from above.
 			if Vector3.UP.dot(collision.get_normal()) > 0.7:
-				# print(Vector3.UP.dot(collision.get_normal()))
+				#print(Vector3.UP.dot(collision.get_normal()))
 				# If so, we squash it and bounce.
 				mob.squash()
 				target_velocity.y = bounce_impulse
@@ -73,3 +81,14 @@ func _physics_process(delta):
 				break
 	
 	move_and_slide()
+	
+	$Pivot.rotation.x = PI / 6 * velocity.y / jump_impulse
+
+
+func _on_mob_detector_body_entered(body: Node3D) -> void:
+	die()
+
+
+func die():
+	hit.emit()
+	queue_free()

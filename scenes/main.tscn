@@ -1,8 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://cx4whaayr74fd"]
+[gd_scene load_steps=12 format=3 uid="uid://cx4whaayr74fd"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_j35ao"]
 [ext_resource type="PackedScene" uid="uid://cpbn5fpqdcr7u" path="res://scenes/player.tscn" id="1_ubhej"]
 [ext_resource type="PackedScene" uid="uid://bxbypfb3cjpka" path="res://scenes/mob.tscn" id="2_w2001"]
+[ext_resource type="FontFile" uid="uid://cctnqtr76prky" path="res://fonts/Montserrat-Medium.ttf" id="4_fgki3"]
+[ext_resource type="Script" path="res://scripts/score_label.gd" id="5_msp2r"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xfjkc"]
 size = Vector3(60, 2, 60)
@@ -22,6 +24,10 @@ _data = {
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0)
 }
 point_count = 5
+
+[sub_resource type="Theme" id="Theme_85opf"]
+default_font = ExtResource("4_fgki3")
+default_font_size = 22
 
 [node name="Main" type="Node"]
 script = ExtResource("1_j35ao")
@@ -75,10 +81,54 @@ mesh = SubResource("CylinderMesh_p7ltg")
 curve = SubResource("Curve3D_ck5f2")
 
 [node name="SpawnLocation" type="PathFollow3D" parent="SpawnPath"]
-transform = Transform3D(0.00375933, 0, -0.999992, 0, 1, 0, 0.999992, 0, 0.00375933, -13.0819, 0, -12.8867)
+transform = Transform3D(0.00375814, 0, -0.999992, 0, 1, 0, 0.999992, 0, 0.00375814, -13.0819, 0, -12.8867)
 
 [node name="MobTimer" type="Timer" parent="."]
 wait_time = 0.5
 autostart = true
 
+[node name="UserInterface" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_85opf")
+
+[node name="ScoreLabel" type="Label" parent="UserInterface"]
+layout_mode = 1
+offset_left = 25.0
+offset_top = 25.0
+offset_right = 86.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Score: 0"
+script = ExtResource("5_msp2r")
+
+[node name="Retry" type="ColorRect" parent="UserInterface"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.352941)
+
+[node name="Label" type="Label" parent="UserInterface/Retry"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -107.0
+offset_top = -14.0
+offset_right = 107.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Press Enter to retry"
+
+[connection signal="hit" from="Player" to="." method="_on_player_hit"]
 [connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
