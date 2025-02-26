@@ -4,8 +4,6 @@ extends CharacterBody3D
 # Emitted when the player was hit by a mob.
 # Put this at the top of the script.
 signal hit
-
-
 # How fast the player moves in meters per second.
 @export var speed = 14
 # The downward acceleration when in the air, in meters per second squared.
@@ -15,8 +13,6 @@ signal hit
 # Vertical impulse applied to the character upon bouncing over a mob in
 # meters per second.
 @export var bounce_impulse = 16
-
-
 var target_velocity = Vector3.ZERO
 
 
