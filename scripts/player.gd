@@ -4,6 +4,7 @@ extends CharacterBody3D
 # Emitted when the player was hit by a mob.
 # Put this at the top of the script.
 signal hit
+
 # How fast the player moves in meters per second.
 @export var speed = 14
 # The downward acceleration when in the air, in meters per second squared.
@@ -13,10 +14,11 @@ signal hit
 # Vertical impulse applied to the character upon bouncing over a mob in
 # meters per second.
 @export var bounce_impulse = 16
+
 var target_velocity = Vector3.ZERO
 
 
-func _physics_process(delta):
+func _physics_process(delta) -> void:
 	# We create a local variable to store the input direction.
 	var direction = Vector3.ZERO
 
@@ -85,6 +87,6 @@ func _on_mob_detector_body_entered(body: Node3D) -> void:
 	die()
 
 
-func die():
+func die() -> void:
 	hit.emit()
 	queue_free()
